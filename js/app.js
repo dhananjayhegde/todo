@@ -151,6 +151,25 @@ var app = function(){
 			});
 		},
 
+		refreshTags : function(items){
+			//update tags
+			if(!items){
+				let itemsPromise = this.controller.loadAllItems();
+				let itemsArray = new Array();
+				
+				itemsPromise
+					.then((results) => {
+						$.each(results.rows, function(i, task){ itemsArray.push(task); });
+						$("#total-items-tag")
+							.attr('data', itemsArray.length);
+						$("#active-items-tag")
+							.attr('data', (itemsArray.filter((item) => item.status == '')).length);
+						$("#completed-items-tag")
+							.attr('data', (itemsArray.filter((item) => item.status == 'X')).length);
+					});
+			}			
+		},
+
 		refreshList : function(){
 			let itemsPromise = this.controller.loadAllItems();
 
@@ -175,6 +194,7 @@ var app = function(){
 							$(this.list).prepend($todotask);
 						}
 					}.bind(this));
+					this.refreshTags(null);
 				})
 				.catch((error) => { console.log("Error in refresh promise: " + error.message); });
 		},
@@ -183,6 +203,7 @@ var app = function(){
 			$('#todo-list').prepend($('<todo-item>')
 							.attr('text', todoItem.item)
 							.on('change', this.toggleSelection.bind(this)));
+			this.refreshTags(null);
 		},
 
 		toggleSelection : function(e){
@@ -201,6 +222,7 @@ var app = function(){
 						.catch((error) => { console.log('Error in deleteSelected(): ' + error.message); });
 				}.bind(this);
 			}.bind(this))());
+			this.refreshTags(null);
 		},
 
 		undoCompletion : function(e){
@@ -218,6 +240,7 @@ var app = function(){
 						.catch((error) => { console.log("Error in undoCompletion: "+ error.message); });
 				}.bind(this);
 			}.bind(this))());
+			this.refreshTags(null);
 		},
 
 		completeSelected : function(e){
@@ -236,6 +259,7 @@ var app = function(){
 						.catch((error) => { console.log("Error in updateStatus Promise: " + error.message); });
 				}.bind(this);
 			}.bind(this))());
+			this.refreshTags(null);
 		}
 	};
 	controller.init(model, view);

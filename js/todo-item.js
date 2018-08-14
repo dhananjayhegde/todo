@@ -91,7 +91,8 @@ class TodoItem extends HTMLElement {
 	}
 
 	_updateRendering(){
-		let template = `
+		// let todo_template = document.createElement('template');
+		let todo_template = `
 			<style>
 				.grid{
 					display: flex;
@@ -225,7 +226,7 @@ class TodoItem extends HTMLElement {
 			</li>
 		`;
 
-		this.shadow.innerHTML = template;
+		this.shadow.innerHTML = todo_template;
 		this.dispatchEvent(new CustomEvent('change', {
 			detail : { 
 				checked : false, 

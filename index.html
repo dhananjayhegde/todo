@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <title>TODO:</title>
+    <script src="js/tag-item.js"></script>
     <script src="js/todo-item.js"></script>
   </head>
   <body>
@@ -19,7 +20,7 @@
     		<div class=".flex-container-sidebar">
     			<div class="flex-sidebar-item top"></div>
 	    		<div class="flex-sidebar-item center info">
-	    			<button id="btn-info">&#x2762;</button>
+	    			<button class="text-button" id="btn-info">Info<span><span></button>
 	    			<ul class="hidden">
 	    				<li>Start writing in the text field >>> </li>
 	    				<li>Once you press Enter or Tab key, task will be added</li>
@@ -48,6 +49,11 @@
 		    		<div class="flex-container-lists">
 		    			<div class="flex-item-list">
 		    				<h2>to do:</h2>
+		    				<div class="statistics-bar">
+		    					<tag-item id="total-items-tag" text="Total" data="0"></tag-item>
+		    					<tag-item id="active-items-tag" text="Active" data="0"></tag-item>
+		    					<tag-item id="completed-items-tag" text="Completed" data="0"></tag-item>
+		    				</div>
 				    		<ul id="todo-list">
 				    			
 				    		</ul>
@@ -66,11 +72,11 @@
     		<div class=".flex-container-sidebar">
     			<div class="flex-sidebar-item top"></div>
     			<div class="flex-sidebar-item center">
-    				<button id="btn-complete-marked">Complete Selected</button>
-    				<button id="btn-undo-complete">Undo Completion</button>
-    				<button id="btn-delete-marked">Delete Selected</button>
-    				<button id="btn-clear-completed">Delete Completed</button>
-	    			<button id="btn-clear-all">Start Afresh</button>
+    				<button class="default-button" id="btn-complete-marked">Complete Selected</button>
+    				<button class="default-button" id="btn-undo-complete">Undo Completion</button>
+    				<button class="default-button" id="btn-delete-marked">Delete Selected</button>
+    				<button class="default-button" id="btn-clear-completed">Delete Completed</button>
+	    			<button class="default-button" id="btn-clear-all">Start Afresh</button>
     			</div>
     			<div class="flex-sidebar-item bottom"></div>	    		
     		</div>

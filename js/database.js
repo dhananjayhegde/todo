@@ -112,4 +112,17 @@ var Database = function(){
 				});
 			});
 		};
+
+		/* ---------------- STATISTICS METHODS ----------------*/
+		this.getCountOfOpenTasks = function(){
+			db = this.db;
+			return new Promise(function(resolve, reject){
+				db.transaction(function(tx){
+					tx.executeSql("SELECT COUNT(*) FROM todo WHERE status = ?", [''],
+							(tx, results) => { resolve(results); }, 
+							(tx, error) => { reject(error); }
+						);
+				});
+			});
+		}
 }
