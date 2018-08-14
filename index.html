@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>TODO:</title>
+    <script src="js/todo-item.js"></script>
+  </head>
+  <body>
+    <div class="flex-container-main">
+    	<!-- LEFT PANEL -->
+    	<div class="flex-item-main left-item left">
+    		<div class=".flex-container-sidebar">
+    			<div class="flex-sidebar-item top"></div>
+	    		<div class="flex-sidebar-item center info">
+	    			<button id="btn-info">&#x2762;</button>
+	    			<ul class="hidden">
+	    				<li>Start writing in the text field >>> </li>
+	    				<li>Once you press Enter or Tab key, task will be added</li>
+	    				<li>Start with '!' to indicate a task of high priority</li>
+	    				<li>Start with '/' to indicate a task of low priority</li>
+	    				<li>Anything else is considered of medium priority</li>
+	    				<li>Click on a task item to mark it completed</li>
+	    				<li>Click on a completed task item to mark it incomplete</li>
+	    				<li>"Start Afresh" will delete all the tasks from database</li>
+	    				<li>Don't worry! You can close the browser.  When you come back, tasks will still be there!</li>
+	    				<li class="danger">For best experience, use Google Chrome</li>
+	    				<li class="warning">No internet access required; Your data are with you!</li>
+	    			</ul>
+	    		</div>
+	    		<div class="flex-sidebar-item bottom"></div>
+    		</div>
+    	</div>
+    	<!-- CENTER PANEL -->
+    	<div class="flex-item-main center-item">
+		    <div class="flex-container">
+		    	<div class="flex-item">
+		    		<h2>+ task:</h2>
+		    		<input placeholder="start with '!' to mark tasks 'high priority', '/' to mark them 'low priority'" id="ta-newtask"/>
+		    	</div>
+		    	<div class="flex-item">
+		    		<div class="flex-container-lists">
+		    			<div class="flex-item-list">
+		    				<h2>to do:</h2>
+				    		<ul id="todo-list">
+				    			
+				    		</ul>
+		    			</div>
+		    			<div class="flex-item-list divider"></div>
+		    			<div class="flex-item-list">
+		    				<ul id="completed-list">
+				    		</ul>
+		    			</div>    			
+		    		</div>
+		    	</div>
+			</div>
+    	</div>
+    	<!-- RIGHT PANEL -->
+    	<div class="flex-item-main right-item right">
+    		<div class=".flex-container-sidebar">
+    			<div class="flex-sidebar-item top"></div>
+    			<div class="flex-sidebar-item center">
+    				<button id="btn-complete-marked">Complete Selected</button>
+    				<button id="btn-undo-complete">Undo Completion</button>
+    				<button id="btn-delete-marked">Delete Selected</button>
+    				<button id="btn-clear-completed">Delete Completed</button>
+	    			<button id="btn-clear-all">Start Afresh</button>
+    			</div>
+    			<div class="flex-sidebar-item bottom"></div>	    		
+    		</div>
+    	</div>
+    </div>
+    <!-- Optional JavaScript -->
+    <script src="js/jquery.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/app.js"></script>
+    <script type="text/javascript">
+		$(document).ready(function(){
+			app();
+		});
+	</script>
+  </body>
+</html>

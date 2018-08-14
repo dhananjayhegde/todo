@@ -1,0 +1,190 @@
+body{
+	font-family: arial;
+	font-weight: 300;
+}
+
+.flex-container-main{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	height: 90%;
+}
+
+.flex-item-main{
+	height: 100%;
+	align-self: flex-start;
+}
+
+.left-item, .right-item{
+	width: 20%;
+	padding-left: 10px;
+}
+
+.center-item{
+	flex: 1;
+}
+
+.flex-container{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	height: 90%;
+}
+
+.flex-item{
+	width: 100%;
+	height: 100%;
+	align-self: flex-start;
+}
+
+.flex-container-lists{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.flex-item-list{
+	height: 50%;
+	width: 100%;
+	align-self: flex-start;
+}
+/*
+.todo-list-item{
+	list-style-type: none;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px;
+	box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
+}*/
+
+.todo-list-item:hover{
+	background-color: #f4d1d1;
+}
+
+.completed{
+	text-decoration: line-through;
+}
+
+.completed:hover{
+	background-color: #c6f2d4;
+}
+
+.divider{
+	height: 2px;
+	width: 80%;
+	align-self: center;
+	background-color: #ccc;
+	margin: 10px;
+	box-shadow: inset 0px 1px 10px rgb(0, 0, 0, 0.3);
+	border-radius: 2em;
+}
+
+#ta-newtask{
+	box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 2em;
+	padding: 0.5em 1em;
+	margin: 3px 3px 3px 40px;
+	font-family: arial;
+	font-weight: 300;
+	width: 92%;
+	height: 1.5em;
+	font-size: 0.9em;
+}
+
+#ta-newtask:focus{
+	outline: none;
+	background-color: #c7f5d5;
+}
+
+button{
+	border-radius: 2em;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+	outline: none;
+	width: 60%;
+	height: 2.3rem;
+	font-family: arial;
+	font-weight: 500;
+	background-color: #fff;
+	margin-top:40px;
+	margin-left:20px;
+}
+
+button:active{
+	background-color: #ccc;
+}
+/* left and right side bar styles*/
+.flex-container-sidebar{
+	display: flex;
+	flex-direction: column;
+}
+.flex-sidebar-item{
+	height: 1.5em;
+}
+.left {
+	padding-right: 0.9em;
+	padding-left: 0;
+	margin-left: -1em;
+}
+.right {
+	padding-left: 0.9em;
+	padding-right: 0;
+	margin-right: -1em;
+}
+.top{
+	align-self: flex-start;
+}
+.bottom {
+	align-self: flex-end;
+}
+.center{
+	flex: 1;
+}
+.info{
+	font-family: monospace;
+	font-size: 0.9em;
+}
+.info > ul > li{
+	list-style-type: decimal;
+	line-height: 2em;
+	text-align: justify;
+}
+.info ul{
+	position: relative;
+	top: -3em;
+	border: 1px solid #ccc;
+	border-radius: 2em;
+	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+	padding-top: 2.5em;
+	padding-right: 0.5em;
+	margin-left: 1em;
+}
+.info > button{
+	width: 2em;
+	height: 2em;
+	border-radius: 1em;
+	position: relative;
+	top: -2.5em;
+	left: -0.3em;
+}
+.hidden{
+	display: none;
+}
+.primary{
+	color: ;
+}
+
+.danger{
+	color: #FF7F23;
+}
+.warning{
+	color: #FFC014;
+}
