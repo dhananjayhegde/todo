@@ -38,3 +38,11 @@ Tasks can be selected individually and be acted upon:
 Action buttons are placed on the right section for this purpose:
 
 ![image](https://user-images.githubusercontent.com/11610999/44067942-714c2dc8-9f95-11e8-8f5e-49bec7d32133.png)
+
+# (web) Technology stack (if it can be called that)!
+- Javascript, jQuery (3.1.1)
+- Custom Components with Shadow DOM (No Polymer etc.)
+- WebSQL for data persistence in-browser
+
+# NOTE
+App is tested only on Google Chrome (Custom components did not seem to work on Edge)
