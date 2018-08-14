@@ -46,3 +46,17 @@ Action buttons are placed on the right section for this purpose:
 
 # NOTE
 App is tested only on Google Chrome (Custom components did not seem to work on Edge)
+
+
+# Project Structure
+If you want to contribute (you are most welcome), project is divided into below sections:
+
+- index.html (basic barebones of the page)
+- js folder
+   - app.js ( magic happens here - divided into 3 namespaces viz. model, view, controller
+   - database.js ( WebSQL related code resides here - almost all methods return a Promise so app.js can rely on them (pun intended ;-) ))
+   - todo-item.js ( custom element to display a task - styles for the tasks are here)
+- css
+    - styles.css (all remaining styles are here)
+    
+ So far, no Bootstrap or other UI frameworks to keep the project lightweight and simple
