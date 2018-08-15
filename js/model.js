@@ -68,5 +68,4 @@ let Model = function(){
 	this.deleteSingleItem = function(item){
 		return this.db.deleteByKey(item);
 	};
-
 };
