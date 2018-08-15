@@ -5,10 +5,16 @@ class TodoItem extends HTMLElement {
 
 		this.shadow = this.attachShadow({mode : 'open'});
 		this._id = '';
-		this._text = '';
-		this._created = new Date();
+		this._text = '';		
+		let d = new Date();
+		this._created = this.getDateInFormat(d);
 		this._status = '';
 		this._priority = '';
+	}
+
+	getDateInFormat(date){
+		let options = { month : "short", day : "2-digit" };
+		return date.toLocaleDateString("en-IN", options);
 	}
 
 	get id(){
@@ -60,7 +66,8 @@ class TodoItem extends HTMLElement {
 	}
 
 	set created(val){
-		this.setAttribute('created', val);
+		let d = new Date(val);
+		this.setAttribute('created', this.getDateInFormat(d));
 	}
 
 	static get observedAttributes(){
@@ -69,11 +76,13 @@ class TodoItem extends HTMLElement {
 
 	attributeChangedCallback(name, oldVal, newVal){
 		var attrName = '_' + name;
-		this[attrName] = newVal;
-		
-		if(name == 'status'){
-			// this._updateRendering();
+
+		switch(name){
+			case "created":
+				newVal = this.getDateInFormat(new Date(newVal));
+				break;
 		}
+		this[attrName] = newVal;
 	}
 
 	connectedCallback(){
@@ -223,6 +232,7 @@ class TodoItem extends HTMLElement {
 					<span class="checkmark"></span>
 				</label>
 				<div class="col fluid">${this.text}</div>
+				<div class="col">${this.created}</div>
 			</li>
 		`;
 
