@@ -116,12 +116,12 @@ let View = function(){
 			.catch((error) => { console.log("Error in refresh promise: " + error.message); });
 	};
 
-	this.addItem = function(todoItem){
-		$('#todo-list').prepend($('<todo-item>')
-						.attr('text', todoItem.item)
-						.on('change', this.toggleSelection.bind(this)));
-		this.refreshTags(null);
-	};
+	// this.addItem = function(todoItem){
+	// 	$('#todo-list').prepend($('<todo-item>')
+	// 					.attr('text', todoItem.item)
+	// 					.on('change', this.toggleSelection.bind(this)));
+	// 	this.refreshTags(null);
+	// };
 
 	this.toggleSelection = function(e){
 		e.target.selected = e.detail.checked;
@@ -177,6 +177,5 @@ let View = function(){
 			}.bind(this);
 		}.bind(this))());
 		this.refreshTags(null);
-	};
-		
+	};		
 };

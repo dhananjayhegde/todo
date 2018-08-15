@@ -55,24 +55,35 @@ class TagItem extends HTMLElement {
 	_updateRendering(){
 		let tag_template = `
 			<style>
-				div{
-					border: 1px solid rgba(0, 0, 0, 0.1);
+				.tag-item{
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+					height: 1.5em;
+					width: 100%;
+					background-color: rgba(0, 0, 0, 0.2);
+					margin: 0em 0.5em;
+					font-size: 0.8em;
 					border-radius: 2em;
-					font-size: 0.7em;
-					background-color: rgba(0, 0, 0, 0.1);
-				}
-				:host(.active), div:hover{
+				}				
+				:host(.active) .tag-item, div:hover{
 					background-color: rgba(0, 0, 0, 0.5);
-					color: #ddd;
+					color: rgba(255, 255, 255, 0.9);
 					border-radius: 2em;
 				}
 				span{
 					padding: 0.7em;
-					margin: 0.5em 0.4em;
+				}
+				.data{
+					// width: 25%;
+				}
+				.text{
+					// flex: 1;
 				}
 			</style>
 			<div class="tag-item">
-				<span class="data">${this.data}</span><span>${this.text}</span>
+				<span class="data">${this.data}</span><span class="text">${this.text}</span>
 			</div>
 		`;
 		this.shadow.innerHTML = tag_template;
