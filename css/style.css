@@ -95,16 +95,18 @@ body{
 	background-color: #c7f5d5;
 }
 
-button{	
+button{
 	outline: none;	
 	font-family: arial;
 	font-weight: 500;
 	font-size: 0.8em;
-	margin-top:3.5em;
-	margin-left:2em;
 	padding: 0.5em 2em;
 	border-radius: 2em;
 	font-weight: 500;
+}
+.flex-sidebar-item button{	
+	margin-top:3.5em;
+	margin-left:2em;
 }
 button.default-button{	
 	border: 1px solid rgba(0, 0, 0, 0.1);
@@ -190,9 +192,13 @@ button:hover{
 }
 
 /* Stats bar */
-.statistics-bar{
+.status-bar{
 	display: flex;
 	flex-direction: row;
+	justify-content: flex-start;
 	margin-left: 3em;
 	margin-top: 0.5em;
+}
+.status-bar > div{
+	align-self: flex-end;
 }
