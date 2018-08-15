@@ -7,6 +7,7 @@ class TagItem extends HTMLElement {
 		// this._id = '';
 		this._text = '';
 		this._data = '';
+		this._active = '';
 	}
 
 	get text(){
@@ -15,6 +16,14 @@ class TagItem extends HTMLElement {
 
 	set text(val){
 		this.setAttribute('text', val);
+	}
+
+	get active(){
+		return this._active;
+	}
+
+	set active(val){
+		this.setAttribute('active', val);
 	}
 
 	get data(){
@@ -26,7 +35,7 @@ class TagItem extends HTMLElement {
 	}
 	
 	static get observedAttributes(){
-		return ['text', 'data'];
+		return ['text', 'data', 'active'];
 	}
 
 	attributeChangedCallback(name, oldVal, newVal){
@@ -50,7 +59,12 @@ class TagItem extends HTMLElement {
 					border: 1px solid rgba(0, 0, 0, 0.1);
 					border-radius: 2em;
 					font-size: 0.7em;
-					background-color: #ccc;
+					background-color: rgba(0, 0, 0, 0.1);
+				}
+				:host(.active), div:hover{
+					background-color: rgba(0, 0, 0, 0.5);
+					color: #ddd;
+					border-radius: 2em;
 				}
 				span{
 					padding: 0.7em;

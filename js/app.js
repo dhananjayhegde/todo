@@ -149,6 +149,34 @@ var app = function(){
 			$('#btn-info').on('click', function(e){
 				$('.info ul').slideToggle();
 			});
+
+			//Handling filter of tasks based on click event on tags
+			$('tag-item').on('click', function(e){ 
+				$thisTag = $(e.target);
+				$thisTag.siblings().removeClass("active");
+				$thisTag.addClass("active");
+				this.filterByTag($thisTag.attr('text'));
+			}.bind(this));
+		},
+
+		filterByTag : function(filterText){
+			switch(filterText){
+				case 'Active':
+					$('todo-item[status!=""]').hide();
+					$('todo-item[status!=""]').promise().done(function(){
+						$('todo-item[status=""]').show();
+					});
+					break;
+				case 'Completed':
+					$('todo-item[status!="X"]').hide();
+					$('todo-item[status!="X"]').promise().done(function(){
+						$('todo-item[status="X"]').show();
+					});					
+					break;
+				case 'Total':
+					$('todo-item').show();
+					break;
+			}
 		},
 
 		refreshTags : function(items){

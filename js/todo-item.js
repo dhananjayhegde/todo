@@ -8,7 +8,7 @@ class TodoItem extends HTMLElement {
 		this._text = '';
 		this._created = new Date();
 		this._status = '';
-		this._priority = 'high';
+		this._priority = '';
 	}
 
 	get id(){
@@ -203,10 +203,10 @@ class TodoItem extends HTMLElement {
 
 				/* Style the checkmark/indicator */
 				.container .checkmark:after {
-				  left: 7px;
-				  top: 4px;
-				  width: 4px;
-				  height: 8px;
+				  left: 12px;
+				  top: -3px;
+				  width: 0.25em;
+				  height: 1em;
 				  border: solid rgb(217, 26, 26);
 				  border-width: 0 3px 3px 0;
 				  -webkit-transform: rotate(45deg);
