@@ -54,8 +54,19 @@
 		    					<tag-item id="active-items-tag" text="Active" data="0"></tag-item>
 								<tag-item id="completed-items-tag" text="Completed" data="0"></tag-item>
 								<div class="sort-criteria">
-									<input type="radio" name="sort-criteria" id="by-date"></input>
-									<label for="#by-date">By Date</label>
+									<label for="#sort-by">Sort By</label>
+									<select id="sort-by">
+										<option>None</option>
+										<option>Date</option>
+										<option>Priority</option>
+										<option>Status</option>
+									</select>
+									<label for="#group-by">Group By</label>
+									<select id="sort-by">
+										<option>Status</option>
+										<option>Date</option>
+										<option>Priority</option>
+									</select>
 								</div>
 		    				</div>
 				    		<ul id="todo-list">

@@ -61,8 +61,7 @@ let Model = function(){
 	this.clearAll = function(){ return this.db.deleteAll(); }; //returns a promise
 
 	this.updateStatus = function($item){
-		return this.db.updateStatus($($item).attr('id'), 
-									$($item).attr('status')); //returns a promise
+		return this.db.updateStatus($($item).attr('id'), $($item).attr('status')); //returns a promise
 	};
 
 	this.deleteSingleItem = function(item){
