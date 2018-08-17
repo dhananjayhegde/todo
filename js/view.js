@@ -1,7 +1,9 @@
-let View = function(){
+let View = function(model){
+	var self = this;
+	this.model = model;
 		
-	this.init = function(controller){
-		this.controller = controller;
+	this.init = function(){
+		// this.controller = controller;
 		this.textArea = $('#ta-newtask')[0];
 		this.list = $('#todo-list')[0];
 		this.completedList = $('#completed-list')[0];
@@ -14,7 +16,7 @@ let View = function(){
 			this.controller
 				.addItem(todoItem)
 				.then((results) => { 
-					this.refreshList(); 
+					this.renderList(); 
 					$(this.textArea).val(''); })
 				.catch((error) => { console.log("Error in add Promise: " + error.message); });
 			
@@ -22,12 +24,12 @@ let View = function(){
 
 		$("#btn-clear-completed").on("click", (e) => {
 			this.controller.clearCompleted()
-				.then((results) => { this.refreshList(); })
+				.then((results) => { this.renderList(); })
 				.catch((error) => { console.log("Error in clearCompleted promise: " + error.message); });
 		});
 		$("#btn-clear-all").on("click", (e) => {
 			this.controller.clearAll()
-				.then((results) => { this.refreshList(); })
+				.then((results) => { this.renderList(); })
 				.catch((error) => { console.log("Error in clearAll promise: " + error.message); });
 		});
 
@@ -46,6 +48,9 @@ let View = function(){
 			$thisTag.addClass("active");
 			this.filterByTag($thisTag.attr('text'));
 		}.bind(this));
+
+		//render initial list
+		this.model.loadAllItems().then(this.renderList);
 	};
 	
 	this.filterByTag = function(filterText){
@@ -68,60 +73,32 @@ let View = function(){
 		}
 	};
 
-	this.refreshTags = function(items){
-		//update tags
-		if(!items){
-			let itemsPromise = this.controller.loadAllItems();
-			let itemsArray = new Array();
+	this.refreshTags = function(tasks){
+		if(!tasks){
+			let tasks = this.model.taskList;
+		}
+		$("#total-items-tag").attr('data', tasks.length);
+		$("#active-items-tag").attr('data', (tasks.filter((item) => item.status == '')).length);
+		$("#completed-items-tag").attr('data', (tasks.filter((item) => item.status == 'X')).length);			
+	};
+
+	this.renderList = function(results){		
+		$(self.list).children('todo-item').remove();
+		$(self.completedList).children('todo-item').remove();
+
+		$.each(results, (i, task) => {
+			$(self.list)
+				.prepend($('<todo-item>')
+					.attr('text', task.item)
+					.attr('id', task.id)
+					.attr('status', task.status)
+					.attr('priority', task.priority)
+					.attr('created', task.created)
+					.on('change', this.toggleSelection));
 			
-			itemsPromise
-				.then((results) => {
-					$.each(results.rows, function(i, task){ itemsArray.push(task); });
-					$("#total-items-tag")
-						.attr('data', itemsArray.length);
-					$("#active-items-tag")
-						.attr('data', (itemsArray.filter((item) => item.status == '')).length);
-					$("#completed-items-tag")
-						.attr('data', (itemsArray.filter((item) => item.status == 'X')).length);
-				});
-		}			
+		});
+		self.refreshTags(results);
 	};
-
-	this.refreshList = function(){
-		let itemsPromise = this.controller.loadAllItems();
-
-		itemsPromise
-			.then((results) => {
-				items = results.rows;
-				
-				$(this.list).children('todo-item').remove();
-				$(this.completedList).children('todo-item').remove();
-				$.each(items, function(i, task){
-					$todotask = $('<todo-item>')
-									.attr('text', task.item)
-									.attr('id', task.id)
-									.attr('status', task.status)
-									.attr('priority', task.priority)
-									.attr('created', task.created)
-									.on('change', this.toggleSelection);
-					
-					if (task.status == 'X') {
-						$(this.completedList).prepend($todotask);
-					} else {
-						$(this.list).prepend($todotask);
-					}
-				}.bind(this));
-				this.refreshTags(null);
-			})
-			.catch((error) => { console.log("Error in refresh promise: " + error.message); });
-	};
-
-	// this.addItem = function(todoItem){
-	// 	$('#todo-list').prepend($('<todo-item>')
-	// 					.attr('text', todoItem.item)
-	// 					.on('change', this.toggleSelection.bind(this)));
-	// 	this.refreshTags(null);
-	// };
 
 	this.toggleSelection = function(e){
 		e.target.selected = e.detail.checked;

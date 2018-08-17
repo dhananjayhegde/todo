@@ -20,21 +20,22 @@ let Task = function(item, created, status, priority){
 };
 
 let Model = function(){
+	var self = this;
+	this.taskList = new Array();
 
 	this.init = function(){
 		this.db = new Database();
 		this.db.init();
-		this.db.loadAllItems();
+		// this.db.loadAllItems();
 	};
 
-	this.loadAllItems = function(){
-		let loadAllPromise = this.db.loadAllItems(); // returns a promise
-		loadAllPromise
-			.then((results) => { this.updateTodoList(results); })
-			.catch((error) => { console.log("Error in promise " + error.message ); });
-
-		return loadAllPromise;
+	async function loadAllItems(){
+		let results = await this.db.loadAllItems(); // returns a promise
+		self.taskList = Object.values(results.rows);
+		return self.taskList;
 	};
+
+	this.loadAllItems = loadAllItems;
 
 	this.updateTodoList = function(result){
 		this.todoList = [];
