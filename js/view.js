@@ -49,6 +49,10 @@ let View = function(model){
 			this.filterByTag($thisTag.attr('text'));
 		}.bind(this));
 
+		$('#sort-by').on('change', (event) => {
+			self.renderList(self.model.sortedList($(event.target).val()));
+		});
+
 		//render initial list
 		this.model.loadAllItems().then(this.renderList);
 	};
