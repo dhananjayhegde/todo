@@ -142,10 +142,10 @@ let Model = function(){
 
 	this.Groupers.groupByDate = function(taskList){
 		let result = {};
-		let groupKeys = new Set(taskList['All'].map(task => task.created));
+		let groupKeys = new Set(taskList['All'].map(task => dateToddMonFormat(task.created)));
 
 		groupKeys.forEach((groupKey) => {
-			result[groupKey] = taskList['All'].filter(task => task.created == groupKey);
+			result[groupKey] = taskList['All'].filter(task => dateToddMonFormat(task.created) == groupKey);
 		});
 		return result;
 	};

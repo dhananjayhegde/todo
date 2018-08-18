@@ -54,7 +54,7 @@
 		    					<tag-item id="active-items-tag" text="Incomplete" data="0"></tag-item>
 								<tag-item id="completed-items-tag" text="Completed" data="0"></tag-item>
 								<div class="sort-criteria">
-									<label for="sort-by">Sort By</label>
+									<label for="sort-by" tooltip="Sorting is in-group">Sort By</label>
 									<select id="sort-by">
 										<option value="by-date-desc" selected>Latest First</option>
 										<option value="by-date-asc">Oldest First</option>										
@@ -73,14 +73,8 @@
 								</div>
 		    				</div>
 				    		<div id="list-area">
-
 							</div>
 		    			</div>
-		    			<!-- <div class="flex-item-list divider"></div> -->
-		    			<!-- <div class="flex-item-list">
-		    				<ul id="completed-list">
-				    		</ul>
-		    			</div>    			 -->
 		    		</div>
 		    	</div>
 			</div>
@@ -101,7 +95,8 @@
     	</div>
     </div>
     <!-- Optional JavaScript -->
-    <script src="js/jquery.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/util.js"></script>
     <script src="js/database.js"></script>
     <script src="js/model.js"></script>
     <script src="js/view.js"></script>
