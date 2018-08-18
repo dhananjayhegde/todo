@@ -132,20 +132,20 @@ let Model = function(){
 	this.Groupers.groupByStatus = function(taskList){
 		let result = {};
 		let groupKeyNames = { 'X' : 'Completed', '' : 'Incomplete'};
-		let groupKeys = new Set(taskList.map(task => task.status));
+		let groupKeys = new Set(taskList['All'].map(task => task.status));
 
-		groupKeys.forEach((gropuKey) => {
-			result[groupKeyNames[groupKeys]] = taskList.filter(task => task.status == groupKey);
+		groupKeys.forEach((groupKey) => {
+			result[groupKeyNames[groupKey]] = taskList['All'].filter(task => task.status == groupKey);
 		});
 		return result;
 	};
 
 	this.Groupers.groupByDate = function(taskList){
 		let result = {};
-		let groupKeys = new Set(taskList.map(task => task.date));
+		let groupKeys = new Set(taskList['All'].map(task => task.created));
 
-		groupKeys.forEach((gropuKey) => {
-			result[groupKeys] = taskList.filter(task => task.created == groupKey);
+		groupKeys.forEach((groupKey) => {
+			result[groupKey] = taskList['All'].filter(task => task.created == groupKey);
 		});
 		return result;
 	};
@@ -153,10 +153,10 @@ let Model = function(){
 	this.Groupers.groupByPriority = function(taskList){
 		let result = {};
 		let groupKeyNames = { '!' : 'High', '-' : 'Medium', '/' : 'Low'};
-		let groupKeys = new Set(taskList.map(task => task.priority));
+		let groupKeys = new Set(taskList['All'].map(task => task.priority));
 
-		groupKeys.forEach((gropuKey) => {
-			result[groupKeyNames[groupKeys]] = taskList.filter(task => task.priority == groupKey);
+		groupKeys.forEach((groupKey) => {
+			result[groupKeyNames[groupKey]] = taskList['All'].filter(task => task.priority == groupKey);
 		});
 		return result;
 	};
@@ -220,9 +220,9 @@ let Model = function(){
 		for(group in taskList){
 			result[group] = taskList[group].sort((t1, t2) => {
 				if(t1.created > t2.created){
-					return -1;
-				}else {
 					return 1;
+				}else {
+					return -1;
 				}
 			});
 		}
@@ -236,9 +236,9 @@ let Model = function(){
 		for(group in taskList){
 			result[group] = taskList[group].sort((t1, t2) => {
 				if(t1.created > t2.created){
-					return 1;
-				}else {
 					return -1;
+				}else {
+					return 1;
 				}
 			});
 		}
@@ -251,7 +251,7 @@ let Model = function(){
 		
 		for(group in taskList){
 			result[group] = taskList[group].sort((t1, t2) => {
-				return self.priorityOrder[t2.priority] - self.priorityOrder[t1.priority];
+				return self.priorityOrder[t1.priority] - self.priorityOrder[t2.priority];
 			});
 		}
 		return result;
@@ -262,7 +262,7 @@ let Model = function(){
 		
 		for(group in taskList){
 			result[group] = taskList[group].sort((t1, t2) => {
-				return self.priorityOrder[t1.priority] - self.priorityOrder[t2.priority];
+				return self.priorityOrder[t2.priority] - self.priorityOrder[t1.priority];
 			});
 		}
 		return result;
@@ -274,7 +274,7 @@ let Model = function(){
 
 		for(group in tasks){
 			result[group] = taskList[group].sort((t1, t2) => {
-				return this.statusOrder[t1.status] - this.statusOrder[t2.status];
+				return this.statusOrder[t2.status] - this.statusOrder[t1.status];
 			});
 		}
 		return result;
@@ -286,7 +286,7 @@ let Model = function(){
 
 		for(group in tasks){
 			result[group] = taskList[group].sort((t1, t2) => {
-				return this.statusOrder[t2.status] - this.statusOrder[t1.status];
+				return this.statusOrder[t1.status] - this.statusOrder[t2.status];
 			});
 		}
 		return result;

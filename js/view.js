@@ -2,8 +2,8 @@ let View = function(model){
 	var self = this;
 	this.model = model;
 	this.ListDisplayOptions = {
-		'filterCriteria' 	: 'all',
-		'groupCriteria' 	: 'none',
+		'filterCriteria' 	: 'by-all',
+		'groupCriteria' 	: 'by-status',
 		'sortCriteria' 		: 'by-date-desc'
 	};
 		
@@ -58,6 +58,11 @@ let View = function(model){
 			self.ListDisplayOptions['sortCriteria'] = $(event.target).val();
 			self.renderList(self.model.getList(self.ListDisplayOptions));
 		});
+		
+		$('#group-by').on('change', (event) => {
+			self.ListDisplayOptions['groupCriteria'] = $(event.target).val();
+			self.renderList(self.model.getList(self.ListDisplayOptions));
+		});
 
 		//render initial list
 		this.model.loadAllItems().then((results) => this.renderList(self.model.getList(self.ListDisplayOptions)));
@@ -75,7 +80,7 @@ let View = function(model){
 				self.ListDisplayOptions['filterCriteria'] = 'by-all';
 				break;
 		}
-		self.renderList(self.model.getList({'filterCriteria' : self.ListDisplayOptions['filterCriteria']}));
+		self.renderList(self.model.getList(self.ListDisplayOptions));
 	};
 
 	this.refreshTags = function(){
@@ -91,9 +96,10 @@ let View = function(model){
 		$.each(Object.keys(results), (i, key) => {
 			//for each group, create a new UL list and set the heading to group key
 			let $list = $('<ul>');
+			$($list).append('<h4>' + key + '</h4>');
 			$.each(results[key], (j, task) => {
 				$($list)
-					.prepend($('<todo-item>')
+					.append($('<todo-item>')
 						.attr('text', task.item)
 						.attr('id', task.id)
 						.attr('status', task.status)
@@ -103,17 +109,6 @@ let View = function(model){
 			});
 			$('#list-area').append($list);
 		});
-		// $.each(results, (i, task) => {
-		// 	$(self.list)
-		// 		.prepend($('<todo-item>')
-		// 			.attr('text', task.item)
-		// 			.attr('id', task.id)
-		// 			.attr('status', task.status)
-		// 			.attr('priority', task.priority)
-		// 			.attr('created', task.created)
-		// 			.on('change', self.toggleSelection));
-			
-		// });
 		self.refreshTags();
 	};
 
@@ -142,6 +137,7 @@ let View = function(model){
 			.updateStatus($items, '')
 			.then((results) => {
 				$items.attr('status', '').on('change', self.toggleSelection);
+				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
 			});
 	},
@@ -152,6 +148,7 @@ let View = function(model){
 			.updateStatus($items, 'X')
 			.then((results) => {
 				$items.attr('status', 'X').on('change', self.toggleSelection);
+				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
 			});
 	};		
