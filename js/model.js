@@ -69,7 +69,12 @@ let Model = function(){
 	}	
 	this.clearCompleted = clearCompleted;
 
-	this.clearAll = function(){ return this.db.deleteAll(); }; //returns a promise
+	// Async-ed deleteAll function - reloads taskList after update!!
+	async function clearAll(){
+		await this.db.deleteAll();
+		await this.loadAllItems();
+	}
+	this.clearAll = clearAll;
 
 	// Async-ed updateStatus function - reloads taskList after update
 	async function updateStatus($items, status){

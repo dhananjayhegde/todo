@@ -27,20 +27,30 @@ let View = function(model){
 			
 		}.bind(this));
 
-		$("#btn-clear-completed").on("click", (e) => {
-			this.model.clearCompleted()
-				.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
-				.catch((error) => { console.log("Error in clearCompleted promise: " + error.message); });
-		});
-		$("#btn-clear-all").on("click", (e) => {
+		$("#btn-clear-completed")
+			.prop('title', 'Delete completed tasks from database')
+			.on("click", (e) => {
+				this.model.clearCompleted()
+					.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
+					.catch((error) => { console.log("Error in clearCompleted promise: " + error.message); });
+			});
+		$("#btn-clear-all")
+			.prop('title', 'Delete all tasks from database')
+			.on("click", (e) => {
 			this.model.clearAll()
 				.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
 				.catch((error) => { console.log("Error in clearAll promise: " + error.message); });
-		});
+			});
 
-		$('#btn-complete-marked').on('click', this.completeSelected.bind(this));
-		$('#btn-delete-marked').on('click', this.deleteSelected.bind(this));
-		$('#btn-undo-complete').on('click', this.undoCompletion.bind(this));
+		$('#btn-complete-marked')
+			.prop('title', 'Set selected tasks to "Completed" status')
+			.on('click', this.completeSelected.bind(this));
+		$('#btn-delete-marked')
+			.prop('title', 'Delete selected tasks from database')
+			.on('click', this.deleteSelected.bind(this));
+		$('#btn-undo-complete')
+			.prop('title', 'Set selected tasks to "Incomplete" status ')
+			.on('click', this.undoCompletion.bind(this));
 		
 		$('#btn-info').on('click', function(e){
 			$('.info ul').slideToggle();
@@ -96,7 +106,7 @@ let View = function(model){
 		$.each(Object.keys(results), (i, key) => {
 			//for each group, create a new UL list and set the heading to group key
 			let $list = $('<ul>');
-			$($list).append('<h4>' + key + '</h4>');
+			$($list).append('<h5>' + key + '</h5>');
 			$.each(results[key], (j, task) => {
 				$($list)
 					.append($('<todo-item>')
