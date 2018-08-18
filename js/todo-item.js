@@ -80,14 +80,20 @@ class TodoItem extends HTMLElement {
 		switch(name){
 			case "created":
 				newVal = this.getDateInFormat(new Date(newVal));
+				this[attrName] = newVal;
 				break;
+			case "status":
+				this[attrName] = newVal;
+				this._updateRendering();
+				break;
+			default:
+				this[attrName] = newVal;
 		}
-		this[attrName] = newVal;
+		
 	}
 
 	connectedCallback(){
 		this._updateRendering();
-		this.shadow.querySelector('li input').addEventListener('click', this._onClick.bind(this));
 	}
 
 	_onClick(event){
@@ -237,6 +243,7 @@ class TodoItem extends HTMLElement {
 		`;
 
 		this.shadow.innerHTML = todo_template;
+		this.shadow.querySelector('li input').addEventListener('click', this._onClick.bind(this));
 		this.dispatchEvent(new CustomEvent('change', {
 			detail : { 
 				checked : false, 

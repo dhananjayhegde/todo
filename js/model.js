@@ -73,9 +73,15 @@ let Model = function(){
 
 	this.clearAll = function(){ return this.db.deleteAll(); }; //returns a promise
 
-	this.updateStatus = function($item){
-		return this.db.updateStatus($($item).attr('id'), $($item).attr('status')); //returns a promise
-	};
+	// Async-ed updateStatus function - reloads taskList after update
+	async function updateStatus($items, status){
+		//TODO: Error handling in case Promise rejects
+		await Promise.all($items.toArray().map(async function(item) {
+			return self.db.updateStatus($(item).attr('id'), status);
+		}));
+		await self.loadAllItems();
+	}
+	this.updateStatus = updateStatus;
 
 	this.deleteSingleItem = function(item){
 		return this.db.deleteByKey(item);

@@ -13,7 +13,7 @@ let View = function(model){
 			let created = new Date();				
 			let todoItem = new Task(item, created, '', '');
 			
-			this.controller
+			this.model
 				.addItem(todoItem)
 				.then((results) => { 
 					this.renderList(); 
@@ -79,7 +79,7 @@ let View = function(model){
 
 	this.refreshTags = function(tasks){
 		if(!tasks){
-			let tasks = this.model.taskList;
+			tasks = this.model.taskList;
 		}
 		$("#total-items-tag").attr('data', tasks.length);
 		$("#active-items-tag").attr('data', (tasks.filter((item) => item.status == '')).length);
@@ -98,7 +98,7 @@ let View = function(model){
 					.attr('status', task.status)
 					.attr('priority', task.priority)
 					.attr('created', task.created)
-					.on('change', this.toggleSelection));
+					.on('change', self.toggleSelection));
 			
 		});
 		self.refreshTags(results);
@@ -113,7 +113,7 @@ let View = function(model){
 
 		$.each($items, (function(){
 			return function(i, item){
-				this.controller.deleteSingleItem(item)
+				this.model.deleteSingleItem(item)
 					.then((results) => {
 						$(item).remove();
 					})
@@ -124,39 +124,22 @@ let View = function(model){
 	};
 
 	this.undoCompletion = function(e){
-		$completedItems = $('todo-item[selected]').filter('[status="X"]');
-
-		$.each($completedItems, (function(){
-			return function(i, item){
-				$(item).attr('status', '');
-				this.controller.updateStatus($(item))
-					.then((results) => {
-						$removedItem = $(item).remove();
-						$removedItem.on('change', this.toggleSelection.bind(this));					
-						$(this.list).prepend($removedItem);
-					})
-					.catch((error) => { console.log("Error in undoCompletion: "+ error.message); });
-			}.bind(this);
-		}.bind(this))());
-		this.refreshTags(null);
+		$items = $('todo-item[selected]').filter('[status="X"]');
+		self.model
+			.updateStatus($items, '')
+			.then((results) => {
+				$items.attr('status', '').on('change', self.toggleSelection);
+				self.refreshTags(null);
+			});
 	},
 
 	this.completeSelected = function(e){
 		$items = $('todo-item[selected]').filter('[status=""]');
-		
-		$.each($items, (function(){
-			return function(i, item){
-				$(item).attr('status', 'X')
-				this.model
-					.updateStatus($(item))
-					.then((results) => {
-						$removedItem = $(item).remove();
-						$removedItem.on('change', this.toggleSelection.bind(this));					
-						$(this.completedList).prepend($removedItem);
-					})
-					.catch((error) => { console.log("Error in updateStatus Promise: " + error.message); });
-			}.bind(this);
-		}.bind(this))());
-		this.refreshTags(null);
+		self.model
+			.updateStatus($items, 'X')
+			.then((results) => {
+				$items.attr('status', 'X').on('change', self.toggleSelection);
+				self.refreshTags(null);
+			});
 	};		
 };
