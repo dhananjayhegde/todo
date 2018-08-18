@@ -20,10 +20,11 @@ let Task = function(item, created, status, priority){
 };
 
 let Model = function(){
-	var self = this;
-	this.taskList = new Array();
-	this.Sorters = {};
-
+	var self 		= this;
+	this.taskList 	= new Array();
+	this.Sorters 	= {};
+	this.Groupers 	= {};
+	this.Filters 	= {}; 
 	this.priorityOrder = {
 		'!' : 99,
 		'-' : 50,
@@ -54,14 +55,12 @@ let Model = function(){
 		this.todoList = [];
 		$.each(result.rows, (i, row) => { this.todoList.push(row); });
 	};
-
-	this.getList = function(){
-		return this.todoList;
-	};
 	
-	this.addItem = function(todoItem){
-		return this.db.addItem(todoItem); //returns a promise
+	async function addItem(todoItem){
+		await this.db.addItem(todoItem); //returns a promise
+		await self.loadAllItems();
 	};
+	this.addItem = addItem;
 	
 	this.deleteItem = function(todoItem){
 		this.todoList.remove(todoItem);
@@ -92,62 +91,204 @@ let Model = function(){
 		return str.replace(/^[-A-Z]|\s[a-z]/igm, function(m) {return m.toUpperCase()});
 	};
 
-	this.sortedList = function(sortCriteria){
-		let sortFunction = sortCriteria
-								.split('-')
-								.map( str => self.toTitleCase(str))
-								.reduce((final, curr) => { return final + curr; }, 'sort');
+	/**
+	 * 
+	 * @param {*} options is of type {filterCriteria : '', sortCriteria: '', groupCriteria: ''}
+	 */
+	this.getList = function(options){
+		let resultArray = {'All' : self.taskList};
+		
+		if(options['filterCriteria']){
+			resultArray = self.applyFilter(resultArray, options['filterCriteria']);
+		}
+		if(options['sortCriteria']){
+			resultArray = self.applySort(resultArray, options['sortCriteria']);
+		}
+		if(options['groupCriteria']){
+			resultArray = self.applyGrouping(resultArray, options['groupCriteria']);
+		}
+		return resultArray;
+	};
+
+	// Group =====>
+	this.applyGrouping = function(taskList, groupCriteria){
+		let groupFunction 
+			= groupCriteria
+				.split('-')
+				.map( str => self.toTitleCase(str))
+				.reduce((final, curr) => { return final + curr; }, 'group');
 		try{
-			return self.Sorters[sortFunction]();
+			return self.Groupers[groupFunction](taskList);
+		}catch(TypeError){
+			console.log('function ' + groupFunction + '() not defined.  List Not Grouped');
+			return self.Groupers['groupByNone'](taskList);
+		}
+	};
+	
+	this.Groupers.groupByNone = function(taskList){
+		return taskList;
+	};
+	
+	this.Groupers.groupByStatus = function(taskList){
+		let result = {};
+		let groupKeyNames = { 'X' : 'Completed', '' : 'Incomplete'};
+		let groupKeys = new Set(taskList.map(task => task.status));
+
+		groupKeys.forEach((gropuKey) => {
+			result[groupKeyNames[groupKeys]] = taskList.filter(task => task.status == groupKey);
+		});
+		return result;
+	};
+
+	this.Groupers.groupByDate = function(taskList){
+		let result = {};
+		let groupKeys = new Set(taskList.map(task => task.date));
+
+		groupKeys.forEach((gropuKey) => {
+			result[groupKeys] = taskList.filter(task => task.created == groupKey);
+		});
+		return result;
+	};
+
+	this.Groupers.groupByPriority = function(taskList){
+		let result = {};
+		let groupKeyNames = { '!' : 'High', '-' : 'Medium', '/' : 'Low'};
+		let groupKeys = new Set(taskList.map(task => task.priority));
+
+		groupKeys.forEach((gropuKey) => {
+			result[groupKeyNames[groupKeys]] = taskList.filter(task => task.priority == groupKey);
+		});
+		return result;
+	};
+	
+	// Filter =====> 
+	this.applyFilter = function(taskList, filterCriteria){
+		let filterFunction 
+			= filterCriteria
+				.split('-')
+				.map( str => self.toTitleCase(str))
+				.reduce((final, curr) => { return final + curr; }, 'filter');
+		try{
+			return self.Filters[filterFunction](taskList);
+		}catch(TypeError){
+			console.log('function ' + filterFunction + '() not defined.  Showing all tasks');
+			return self.Filters['filterByAll'](taskList);
+		}
+	};
+	
+	this.Filters.filterByAll = function(taskList){
+		return taskList;
+	};
+
+	this.Filters.filterByIncomplete = function(taskList){
+		let result = {};
+		for(group in taskList){
+			result[group] = taskList[group].filter(task => task.status == '');
+		}
+		return result;
+		// return taskList.filter(task => task.status == '');
+	};
+
+	this.Filters.filterByComplete = function(taskList){
+		let result = {};
+		for(group in taskList){
+			result[group] = taskList[group].filter(task => task.status == 'X');
+		}
+		return result;
+		// return taskList.filter(task => task.status == 'X');
+	};
+
+	// Sort =====>
+	this.applySort = function(taskList, sortCriteria){
+		let sortFunction 
+			= sortCriteria
+				.split('-')
+				.map( str => self.toTitleCase(str))
+				.reduce((final, curr) => { return final + curr; }, 'sort');
+		try{
+			return self.Sorters[sortFunction](taskList);
 		}catch(TypeError){
 			console.log('function ' + sortFunction + '() not defined.  Sorting by Date by defualt');
-			return self.Sorters['sortByDateDesc']();
+			return self.Sorters['sortByDateDesc'](taskList);
 		}
 	}
 
-	this.Sorters.sortByDateAsc = function(){
+	this.Sorters.sortByDateAsc = function(taskList){
 		console.log("sortByDateAsc");
-		return self.taskList.sort((t1, t2) => {
-			if(t1.created > t2.created){
-				return -1;
-			}else {
-				return 1;
-			}
-		});
+		let result = {};
+
+		for(group in taskList){
+			result[group] = taskList[group].sort((t1, t2) => {
+				if(t1.created > t2.created){
+					return -1;
+				}else {
+					return 1;
+				}
+			});
+		}
+		return result;
 	};
-	this.Sorters.sortByDateDesc = function(){
+	
+	this.Sorters.sortByDateDesc = function(taskList){
 		console.log("sortByDateDsc");
-		return self.taskList.sort((t1, t2) => {
-			if(t1.created > t2.created){
-				return 1;
-			}else {
-				return -1;
-			}
-		});
+		let result = {};
+
+		for(group in taskList){
+			result[group] = taskList[group].sort((t1, t2) => {
+				if(t1.created > t2.created){
+					return 1;
+				}else {
+					return -1;
+				}
+			});
+		}
+		return result;
 	};
-	this.Sorters.sortByPriorityAsc = function(){
+	
+	this.Sorters.sortByPriorityAsc = function(taskList){
 		console.log("sortByPriorityAsc");
+		let result = {};
 		
-		return self.taskList.sort((t1, t2) => {
-			return self.priorityOrder[t2.priority] - self.priorityOrder[t1.priority];
-		});
+		for(group in taskList){
+			result[group] = taskList[group].sort((t1, t2) => {
+				return self.priorityOrder[t2.priority] - self.priorityOrder[t1.priority];
+			});
+		}
+		return result;
 	};
-	this.Sorters.sortByPriorityDesc = function(){
+	this.Sorters.sortByPriorityDesc = function(taskList){
 		console.log("sortByPriorityDesc");
-		return self.taskList.sort((t1, t2) => {
-			return self.priorityOrder[t1.priority] - self.priorityOrder[t2.priority];
-		});
+		let result = {};
+		
+		for(group in taskList){
+			result[group] = taskList[group].sort((t1, t2) => {
+				return self.priorityOrder[t1.priority] - self.priorityOrder[t2.priority];
+			});
+		}
+		return result;
 	};
-	this.Sorters.sortByStatusCompleteFirst = function(){
+	
+	this.Sorters.sortByStatusCompleteFirst = function(taskList){
 		console.log("sortByStatusCompleteFirst");
-		return self.taskList.sort((t1, t2) => {
-			return this.statusOrder[t1.status] - this.statusOrder[t2.status];
-		});
+		let result = {};
+
+		for(group in tasks){
+			result[group] = taskList[group].sort((t1, t2) => {
+				return this.statusOrder[t1.status] - this.statusOrder[t2.status];
+			});
+		}
+		return result;
 	};
-	this.Sorters.sortByStatusIncompleteFirst = function(){
+	
+	this.Sorters.sortByStatusIncompleteFirst = function(taskList){
 		console.log("sortByStatusIncompleteFirst");
-		return self.taskList.sort((t1, t2) => {
-			return this.statusOrder[t2.status] - this.statusOrder[t1.status];
-		});
+		let result = {};
+
+		for(group in tasks){
+			result[group] = taskList[group].sort((t1, t2) => {
+				return this.statusOrder[t2.status] - this.statusOrder[t1.status];
+			});
+		}
+		return result;
 	};
 };

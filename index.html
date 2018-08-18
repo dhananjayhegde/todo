@@ -50,11 +50,11 @@
 		    			<div class="flex-item-list">
 		    				<!-- <h2>to do:</h2> -->
 		    				<div class="status-bar">
-		    					<tag-item id="total-items-tag" text="Total" data="0"></tag-item>
-		    					<tag-item id="active-items-tag" text="Active" data="0"></tag-item>
+		    					<tag-item id="total-items-tag" text="All" data="0"></tag-item>
+		    					<tag-item id="active-items-tag" text="Incomplete" data="0"></tag-item>
 								<tag-item id="completed-items-tag" text="Completed" data="0"></tag-item>
 								<div class="sort-criteria">
-									<label for="#sort-by">Sort By</label>
+									<label for="sort-by">Sort By</label>
 									<select id="sort-by">
 										<option value="by-date-desc">Latest First</option>
 										<option value="by-date-asc">Oldest First</option>										
@@ -63,23 +63,24 @@
 										<option value="by-status-complete-first">Status (Complete First)</option>
 										<option value="by-status-incomplete-first">Status (Incomplete First)</option>
 									</select>
-									<label for="#group-by">Group By</label>
-									<select id="sort-by">
-										<option>Status</option>
-										<option>Date</option>
-										<option>Priority</option>
+									<label for="group-by">Group By</label>
+									<select id="group-by">
+										<option value="by-none"></option>
+										<option value="by-status">Status</option>
+										<option value="by-date">Date</option>
+										<option value="by-priority">Priority</option>
 									</select>
 								</div>
 		    				</div>
-				    		<ul id="todo-list">
-				    			
-				    		</ul>
+				    		<div id="list-area">
+
+							</div>
 		    			</div>
 		    			<!-- <div class="flex-item-list divider"></div> -->
-		    			<div class="flex-item-list">
+		    			<!-- <div class="flex-item-list">
 		    				<ul id="completed-list">
 				    		</ul>
-		    			</div>    			
+		    			</div>    			 -->
 		    		</div>
 		    	</div>
 			</div>

@@ -1,6 +1,11 @@
 let View = function(model){
 	var self = this;
 	this.model = model;
+	this.ListDisplayOptions = {
+		'filterCriteria' 	: 'all',
+		'groupCriteria' 	: 'none',
+		'sortCriteria' 		: 'by-date-desc'
+	};
 		
 	this.init = function(){
 		// this.controller = controller;
@@ -15,8 +20,8 @@ let View = function(model){
 			
 			this.model
 				.addItem(todoItem)
-				.then((results) => { 
-					this.renderList(); 
+				.then((results) => {
+					this.renderList(self.model.getList(self.ListDisplayOptions)); 
 					$(this.textArea).val(''); })
 				.catch((error) => { console.log("Error in add Promise: " + error.message); });
 			
@@ -24,12 +29,12 @@ let View = function(model){
 
 		$("#btn-clear-completed").on("click", (e) => {
 			this.controller.clearCompleted()
-				.then((results) => { this.renderList(); })
+				.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
 				.catch((error) => { console.log("Error in clearCompleted promise: " + error.message); });
 		});
 		$("#btn-clear-all").on("click", (e) => {
 			this.controller.clearAll()
-				.then((results) => { this.renderList(); })
+				.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
 				.catch((error) => { console.log("Error in clearAll promise: " + error.message); });
 		});
 
@@ -50,58 +55,66 @@ let View = function(model){
 		}.bind(this));
 
 		$('#sort-by').on('change', (event) => {
-			self.renderList(self.model.sortedList($(event.target).val()));
+			self.ListDisplayOptions['sortCriteria'] = $(event.target).val();
+			self.renderList(self.model.getList(self.ListDisplayOptions));
 		});
 
 		//render initial list
-		this.model.loadAllItems().then(this.renderList);
+		this.model.loadAllItems().then((results) => this.renderList(self.model.getList(self.ListDisplayOptions)));
 	};
 	
 	this.filterByTag = function(filterText){
 		switch(filterText){
-			case 'Active':
-				$('todo-item[status!=""]').hide();
-				$('todo-item[status!=""]').promise().done(function(){
-					$('todo-item[status=""]').show();
-				});
+			case 'Incomplete':
+				self.ListDisplayOptions['filterCriteria'] = 'by-incomplete';
 				break;
 			case 'Completed':
-				$('todo-item[status!="X"]').hide();
-				$('todo-item[status!="X"]').promise().done(function(){
-					$('todo-item[status="X"]').show();
-				});					
+				self.ListDisplayOptions['filterCriteria'] = 'by-complete';				
 				break;
-			case 'Total':
-				$('todo-item').show();
+			case 'All':
+				self.ListDisplayOptions['filterCriteria'] = 'by-all';
 				break;
 		}
+		self.renderList(self.model.getList({'filterCriteria' : self.ListDisplayOptions['filterCriteria']}));
 	};
 
-	this.refreshTags = function(tasks){
-		if(!tasks){
-			tasks = this.model.taskList;
-		}
+	this.refreshTags = function(){
+		tasks = this.model.taskList;
 		$("#total-items-tag").attr('data', tasks.length);
 		$("#active-items-tag").attr('data', (tasks.filter((item) => item.status == '')).length);
 		$("#completed-items-tag").attr('data', (tasks.filter((item) => item.status == 'X')).length);			
 	};
 
 	this.renderList = function(results){		
-		$(self.list).children('todo-item').remove();
-		$(self.completedList).children('todo-item').remove();
+		$('#list-area').children().remove();
 
-		$.each(results, (i, task) => {
-			$(self.list)
-				.prepend($('<todo-item>')
-					.attr('text', task.item)
-					.attr('id', task.id)
-					.attr('status', task.status)
-					.attr('priority', task.priority)
-					.attr('created', task.created)
-					.on('change', self.toggleSelection));
-			
+		$.each(Object.keys(results), (i, key) => {
+			//for each group, create a new UL list and set the heading to group key
+			let $list = $('<ul>');
+			$.each(results[key], (j, task) => {
+				$($list)
+					.prepend($('<todo-item>')
+						.attr('text', task.item)
+						.attr('id', task.id)
+						.attr('status', task.status)
+						.attr('priority', task.priority)
+						.attr('created', task.created)
+						.on('change', self.toggleSelection));
+			});
+			$('#list-area').append($list);
 		});
-		self.refreshTags(results);
+		// $.each(results, (i, task) => {
+		// 	$(self.list)
+		// 		.prepend($('<todo-item>')
+		// 			.attr('text', task.item)
+		// 			.attr('id', task.id)
+		// 			.attr('status', task.status)
+		// 			.attr('priority', task.priority)
+		// 			.attr('created', task.created)
+		// 			.on('change', self.toggleSelection));
+			
+		// });
+		self.refreshTags();
 	};
 
 	this.toggleSelection = function(e){
@@ -120,7 +133,7 @@ let View = function(model){
 					.catch((error) => { console.log('Error in deleteSelected(): ' + error.message); });
 			}.bind(this);
 		}.bind(this))());
-		this.refreshTags(null);
+		this.refreshTags();
 	};
 
 	this.undoCompletion = function(e){
@@ -129,7 +142,7 @@ let View = function(model){
 			.updateStatus($items, '')
 			.then((results) => {
 				$items.attr('status', '').on('change', self.toggleSelection);
-				self.refreshTags(null);
+				self.refreshTags();
 			});
 	},
 
@@ -139,7 +152,7 @@ let View = function(model){
 			.updateStatus($items, 'X')
 			.then((results) => {
 				$items.attr('status', 'X').on('change', self.toggleSelection);
-				self.refreshTags(null);
+				self.refreshTags();
 			});
 	};		
 };

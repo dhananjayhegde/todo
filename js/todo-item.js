@@ -136,7 +136,7 @@ class TodoItem extends HTMLElement {
 				}
 				:host(.completed) li{
 					text-decoration: line-through;
-					color: #ada3a3;
+					// color: #ada3a3;
 				}
 				:host(.completed:hover) li{
 					background-color: #c6f2d4;
@@ -144,7 +144,7 @@ class TodoItem extends HTMLElement {
 				}
 				:host([status='X']) li{
 					text-decoration: line-through;
-					color: #ada3a3;
+					// color: #ada3a3;
 				}
 				/*:host([status='X']:hover) li{
 					background-color: #c6f2d4;
