@@ -28,12 +28,12 @@ let View = function(model){
 		}.bind(this));
 
 		$("#btn-clear-completed").on("click", (e) => {
-			this.controller.clearCompleted()
+			this.model.clearCompleted()
 				.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
 				.catch((error) => { console.log("Error in clearCompleted promise: " + error.message); });
 		});
 		$("#btn-clear-all").on("click", (e) => {
-			this.controller.clearAll()
+			this.model.clearAll()
 				.then((results) => { this.renderList(self.model.getList(self.ListDisplayOptions)); })
 				.catch((error) => { console.log("Error in clearAll promise: " + error.message); });
 		});
@@ -118,17 +118,12 @@ let View = function(model){
 
 	this.deleteSelected = function(e){
 		$items = $('todo-item[selected]');
-
-		$.each($items, (function(){
-			return function(i, item){
-				this.model.deleteSingleItem(item)
-					.then((results) => {
-						$(item).remove();
-					})
-					.catch((error) => { console.log('Error in deleteSelected(): ' + error.message); });
-			}.bind(this);
-		}.bind(this))());
-		this.refreshTags();
+		self.model
+			.deleteSingleItem($items)
+			.then((results) => {
+				self.renderList(self.model.getList(self.ListDisplayOptions));
+				self.refreshTags();
+			});
 	};
 
 	this.undoCompletion = function(e){
@@ -136,7 +131,6 @@ let View = function(model){
 		self.model
 			.updateStatus($items, '')
 			.then((results) => {
-				$items.attr('status', '').on('change', self.toggleSelection);
 				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
 			});
@@ -147,7 +141,6 @@ let View = function(model){
 		self.model
 			.updateStatus($items, 'X')
 			.then((results) => {
-				$items.attr('status', 'X').on('change', self.toggleSelection);
 				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
 			});

@@ -62,14 +62,12 @@ let Model = function(){
 	};
 	this.addItem = addItem;
 	
-	this.deleteItem = function(todoItem){
-		this.todoList.remove(todoItem);
-	};
-
-	this.clearCompleted = function(){
-		let clearPromise = this.db.deleteCompleted(); //returns a promise
-		return clearPromise;
-	};
+	// Async-ed clearCompleted function - reloads taskList after update
+	async function clearCompleted(){
+		await this.db.deleteCompleted();
+		await self.loadAllItems();
+	}	
+	this.clearCompleted = clearCompleted;
 
 	this.clearAll = function(){ return this.db.deleteAll(); }; //returns a promise
 
@@ -83,9 +81,14 @@ let Model = function(){
 	}
 	this.updateStatus = updateStatus;
 
-	this.deleteSingleItem = function(item){
-		return this.db.deleteByKey(item);
-	};
+	// Async-ed deleteSingleItem function - reloads taskList after delete
+	async function deleteSingleItem($items){
+		await Promise.all($items.toArray().map(async function(item) {
+			return self.db.deleteByKey(item);
+		}));
+		await self.loadAllItems();
+	}	
+	this.deleteSingleItem = deleteSingleItem;
 
 	this.toTitleCase = function(str){
 		return str.replace(/^[-A-Z]|\s[a-z]/igm, function(m) {return m.toUpperCase()});
@@ -263,30 +266,6 @@ let Model = function(){
 		for(group in taskList){
 			result[group] = taskList[group].sort((t1, t2) => {
 				return self.priorityOrder[t2.priority] - self.priorityOrder[t1.priority];
-			});
-		}
-		return result;
-	};
-	
-	this.Sorters.sortByStatusCompleteFirst = function(taskList){
-		console.log("sortByStatusCompleteFirst");
-		let result = {};
-
-		for(group in tasks){
-			result[group] = taskList[group].sort((t1, t2) => {
-				return this.statusOrder[t2.status] - this.statusOrder[t1.status];
-			});
-		}
-		return result;
-	};
-	
-	this.Sorters.sortByStatusIncompleteFirst = function(taskList){
-		console.log("sortByStatusIncompleteFirst");
-		let result = {};
-
-		for(group in tasks){
-			result[group] = taskList[group].sort((t1, t2) => {
-				return this.statusOrder[t1.status] - this.statusOrder[t2.status];
 			});
 		}
 		return result;
