@@ -94,7 +94,7 @@ let Model = function(){
 			return self.Sorters[sortFunction]();
 		}catch(TypeError){
 			console.log('function ' + sortFunction + '() not defined.  Sorting by Date by defualt');
-			return self.Sorters['sortByDateAsc']();
+			return self.Sorters['sortByDateDesc']();
 		}
 	}
 
@@ -129,6 +129,18 @@ let Model = function(){
 		console.log("sortByPriorityDesc");
 		return self.taskList.sort((t1, t2) => {
 			return self.priorityOrder[t1.priority] - self.priorityOrder[t2.priority];
+		});
+	};
+	this.Sorters.sortByStatusCompleteFirst = function(){
+		console.log("sortByStatusCompleteFirst");
+		return self.taskList.sort((t1, t2) => {
+			return this.statusOrder[t1.status] - this.statusOrder[t2.status];
+		});
+	};
+	this.Sorters.sortByStatusIncompleteFirst = function(){
+		console.log("sortByStatusIncompleteFirst");
+		return self.taskList.sort((t1, t2) => {
+			return this.statusOrder[t2.status] - this.statusOrder[t1.status];
 		});
 	};
 };

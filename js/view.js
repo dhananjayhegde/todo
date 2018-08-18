@@ -147,7 +147,7 @@ let View = function(model){
 		$.each($items, (function(){
 			return function(i, item){
 				$(item).attr('status', 'X')
-				this.controller
+				this.model
 					.updateStatus($(item))
 					.then((results) => {
 						$removedItem = $(item).remove();
