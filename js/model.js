@@ -44,6 +44,7 @@ let Model = function(){
 	async function loadAllItems(){
 		let results = await this.db.loadAllItems(); // returns a promise
 		self.taskList = Object.values(results.rows);
+		self.taskList.forEach( t => t.created = new Date(t.created));
 		return self.taskList;
 	};
 
