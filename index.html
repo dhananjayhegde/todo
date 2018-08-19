@@ -49,20 +49,32 @@
 		    		<div class="flex-container-lists">
 		    			<div class="flex-item-list">
 		    				<!-- <h2>to do:</h2> -->
-		    				<div class="statistics-bar">
-		    					<tag-item id="total-items-tag" text="Total" data="0"></tag-item>
-		    					<tag-item id="active-items-tag" text="Active" data="0"></tag-item>
-		    					<tag-item id="completed-items-tag" text="Completed" data="0"></tag-item>
+		    				<div class="status-bar">
+		    					<tag-item id="total-items-tag" text="All" data="0"></tag-item>
+		    					<tag-item id="active-items-tag" text="Incomplete" data="0"></tag-item>
+								<tag-item id="completed-items-tag" text="Completed" data="0"></tag-item>
+								<div class="sort-criteria">
+									<label for="sort-by" title="Sorting is in-group">Sort By</label>
+									<select id="sort-by" title="Sorting is in-group" >
+										<option value="by-date-desc" selected>Latest First</option>
+										<option value="by-date-asc">Oldest First</option>										
+										<option value="by-priority-desc">Priority High to Low</option>
+										<option value="by-priority-asc">Priority Low to High</option>
+										<!-- <option value="by-status-complete-first">Status (Complete First)</option>
+										<option value="by-status-incomplete-first">Status (Incomplete First)</option> -->
+									</select>
+									<label for="group-by" title="Gives best result if gouping and sorting are by same criteria">Group By</label>
+									<select id="group-by" title="Gives best result if gouping and sorting are by same criteria">										
+										<option value="by-status" selected>Status</option>
+										<option value="by-date">Date</option>
+										<option value="by-priority">Priority</option>
+										<option value="by-none"></option>
+									</select>
+								</div>
 		    				</div>
-				    		<ul id="todo-list">
-				    			
-				    		</ul>
+				    		<div id="list-area">
+							</div>
 		    			</div>
-		    			<!-- <div class="flex-item-list divider"></div> -->
-		    			<div class="flex-item-list">
-		    				<ul id="completed-list">
-				    		</ul>
-		    			</div>    			
 		    		</div>
 		    	</div>
 			</div>
@@ -83,7 +95,8 @@
     	</div>
     </div>
     <!-- Optional JavaScript -->
-    <script src="js/jquery.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/util.js"></script>
     <script src="js/database.js"></script>
     <script src="js/model.js"></script>
     <script src="js/view.js"></script>
