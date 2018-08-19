@@ -133,7 +133,8 @@ let View = function(model){
 			.then((results) => {
 				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
-			});
+			})
+			.catch(console.error);
 	};
 
 	this.undoCompletion = function(e){
@@ -143,7 +144,8 @@ let View = function(model){
 			.then((results) => {
 				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
-			});
+			})
+			.catch(console.error);
 	},
 
 	this.completeSelected = function(e){
@@ -153,6 +155,7 @@ let View = function(model){
 			.then((results) => {
 				self.renderList(self.model.getList(self.ListDisplayOptions));
 				self.refreshTags();
-			});
+			})
+			.catch(console.error);
 	};		
 };
