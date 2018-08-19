@@ -142,6 +142,10 @@ let Model = function(){
 		let groupKeyNames = { 'X' : 'Completed', '' : 'Incomplete'};
 		let groupKeys = new Set(taskList['All'].map(task => task.status));
 
+		//Whenever groupByStatus is chosen, always show Incomplete group first
+		let statusOrder = { 'X' : 99, '' : 9 };
+		groupKeys = new Set([...groupKeys].sort((i, j) => statusOrder[i] - statusOrder[j]));
+		
 		groupKeys.forEach((groupKey) => {
 			result[groupKeyNames[groupKey]] = taskList['All'].filter(task => task.status == groupKey);
 		});
@@ -151,6 +155,9 @@ let Model = function(){
 	this.Groupers.groupByDate = function(taskList){
 		let result = {};
 		let groupKeys = new Set(taskList['All'].map(task => dateToddMonFormat(task.created)));
+
+		//Whenever groupByDate is chosen, always show recent group first
+		groupKeys = new Set([...groupKeys].sort((i, j) => new Date(i) < new Date(j)));
 
 		groupKeys.forEach((groupKey) => {
 			result[groupKey] = taskList['All'].filter(task => dateToddMonFormat(task.created) == groupKey);
@@ -163,6 +170,10 @@ let Model = function(){
 		let groupKeyNames = { '!' : 'High', '-' : 'Medium', '/' : 'Low'};
 		let groupKeys = new Set(taskList['All'].map(task => task.priority));
 
+		//Whenever groupByStatus is chosen, always show Incomplete group first
+		let priorityOrder = { '!' : 99, '-' : 9, '/' : 0};
+		groupKeys = new Set([...groupKeys].sort((i, j) => priorityOrder[j] - priorityOrder[i]));
+		
 		groupKeys.forEach((groupKey) => {
 			result[groupKeyNames[groupKey]] = taskList['All'].filter(task => task.priority == groupKey);
 		});
