@@ -105,6 +105,15 @@ class TodoItem extends HTMLElement {
 		}));
 	}
 
+	_onDeleteClick(event){
+		this.dispatchEvent(new CustomEvent('delete', {
+			detail : { 
+				id : this.id
+			},
+			bubbles : true,
+		}));
+	}
+
 	_updateRendering(){
 		// let todo_template = document.createElement('template');
 		let todo_template = `
@@ -171,9 +180,8 @@ class TodoItem extends HTMLElement {
 				  height: 1.5em;
 				  border-radius: 2em;
 				}
-
 				/* Hide the browser's default checkbox */
-				.container input {
+				.container input{
 				  position: absolute;
 				  opacity: 0;
 				  cursor: pointer;
@@ -230,6 +238,12 @@ class TodoItem extends HTMLElement {
 				  border-radius: 0px;
 				}
 				/* Custom checkbox css ends */
+				.icon-button{
+					font-size: 1em;
+					cursor: pointer;
+					padding: 0em 0em 0em 0.5em;
+					border-left: 1px solid;
+				}
 			</style>
 			
 			<li class="grid">
@@ -239,11 +253,15 @@ class TodoItem extends HTMLElement {
 				</label>
 				<div class="col fluid">${this.text}</div>
 				<div class="col">${this.created}</div>
+				<div class="col icon-button delete" title="Delete">
+					<div>&#935;</div>
+				</div>
 			</li>
 		`;
 
 		this.shadow.innerHTML = todo_template;
 		this.shadow.querySelector('li input').addEventListener('click', this._onClick.bind(this));
+		this.shadow.querySelector('li div.delete').addEventListener('click', this._onDeleteClick.bind(this));
 		this.dispatchEvent(new CustomEvent('change', {
 			detail : { 
 				checked : false, 

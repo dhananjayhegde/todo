@@ -115,7 +115,8 @@ let View = function(model){
 						.attr('status', task.status)
 						.attr('priority', task.priority)
 						.attr('created', task.created)
-						.on('change', self.toggleSelection));
+						.on('change', self.toggleSelection)
+						.on('delete', self.deleteItem));
 			});
 			$('#list-area').append($list);
 		});
@@ -124,6 +125,16 @@ let View = function(model){
 
 	this.toggleSelection = function(e){
 		e.target.selected = e.detail.checked;
+	};
+
+	this.deleteItem = function(e){
+		self.model
+			.deleteSingleItem($(e.target))
+			.then((results) => {
+				self.renderList(self.model.getList(self.ListDisplayOptions));
+				self.refreshTags();
+			})
+			.catch(console.error);
 	};
 
 	this.deleteSelected = function(e){
