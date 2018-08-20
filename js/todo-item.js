@@ -245,9 +245,24 @@ class TodoItem extends HTMLElement {
 					border-left: 1px solid;
 				}
 			</style>
-			
+		`;
+
+		let todo_template_completed = `
 			<li class="grid">
-				<label class="container col fixed">
+				<label class="container col fixed" title="Click to change status">
+					<input type="checkbox" checked/>
+					<span class="checkmark"></span>
+				</label>
+				<div class="col fluid">${this.text}</div>
+				<div class="col">${this.created}</div>
+				<div class="col icon-button delete" title="Delete">
+					<div>&#935;</div>
+				</div>
+			</li>
+		`;
+		let todo_template_incomplete = `
+			<li class="grid">
+				<label class="container col fixed" title="Click to change status">
 					<input type="checkbox"/>
 					<span class="checkmark"></span>
 				</label>
@@ -259,15 +274,20 @@ class TodoItem extends HTMLElement {
 			</li>
 		`;
 
-		this.shadow.innerHTML = todo_template;
+		if(this.status === 'X'){
+			this.shadow.innerHTML = todo_template + todo_template_completed;
+		} else {
+			this.shadow.innerHTML = todo_template + todo_template_incomplete;
+		}
 		this.shadow.querySelector('li input').addEventListener('click', this._onClick.bind(this));
 		this.shadow.querySelector('li div.delete').addEventListener('click', this._onDeleteClick.bind(this));
+		/*
 		this.dispatchEvent(new CustomEvent('change', {
 			detail : { 
 				checked : false, 
 			},
 			bubbles : true,
-		}));
+		}));*/
 	}
 }
 
