@@ -62,6 +62,21 @@ var Database = function(){
 			});
 		}
 
+		this.updateTask = function(id, text, priority){
+			db = this.db;
+			
+			return new Promise((resolve, reject) => {
+				db.transaction(function(tx){
+				tx.executeSql("UPDATE todo SET item = ?, priority = ?" +
+								"WHERE id = ?",
+								[text, priority, id],
+								(tx, results) => { resolve(results); },
+								(tx, error) => { reject(error); }
+							);
+				});
+			});
+		};
+
 		this.deleteByKey = function(item){
 			db = this.db;
 			return new Promise((resolve, reject) => {
