@@ -117,6 +117,7 @@ let View = function(model){
 						.attr('created', task.created)
 						.on('change', self.toggleSelection)
 						.on('change', self.toggleCompletion)
+						.on('edited', self.updateTask)
 						.on('delete', self.deleteItem));
 			});
 			$('#list-area').append($list);
@@ -180,5 +181,19 @@ let View = function(model){
 				self.refreshTags();
 			})
 			.catch(console.error);
-	};		
+	};
+	
+	this.updateTask = function(e){
+		let $task = $(e.target);
+		// new text and priority are in e.detail.value set inside todo-item
+		// priority will be overwritten inside Task constructor
+		let newtask = new Task(e.detail.value, $task.attr('created'), $task.attr('status'), '');
+		
+		self.model.updateTask($task.attr('id'), newtask)
+			.then((results) => {
+				self.renderList(self.model.getList(self.ListDisplayOptions));
+				self.refreshTags();
+			})
+			.catch(console.error);
+	};
 };

@@ -8,6 +8,10 @@ let Task = function(item, created, status, priority){
 			priority = item.charAt(0);
 			item = item.substring(1).trim();
 			break;
+		case '-':
+			priority = '-';
+			item = item.substring(1).trim();
+			break;
 		default:
 			priority = '-';
 	}
@@ -85,6 +89,13 @@ let Model = function(){
 		await self.loadAllItems();
 	}
 	this.updateStatus = updateStatus;
+
+	async function updateTask(id, newTask){
+		//TODO: Error handling in case Promise rejects
+		await this.db.updateTask(id, newTask.item, newTask.priority)
+		await self.loadAllItems();
+	}
+	this.updateTask = updateTask;
 
 	// Async-ed deleteSingleItem function - reloads taskList after delete
 	async function deleteSingleItem($items){

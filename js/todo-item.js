@@ -10,6 +10,8 @@ class TodoItem extends HTMLElement {
 		this._created = this.getDateInFormat(d);
 		this._status = '';
 		this._priority = '';
+
+		this._edit_mode = false;
 	}
 
 	getDateInFormat(date){
@@ -94,6 +96,20 @@ class TodoItem extends HTMLElement {
 
 	connectedCallback(){
 		this._updateRendering();
+	}
+
+	_onDblClick(event){
+		this._edit_mode = true;
+		this._updateRendering();
+	}
+
+	_onEdited(event){
+		this.dispatchEvent(new CustomEvent('edited', {
+			detail : { 
+				value : event.target.value, 
+			},
+			bubbles : true,
+		}));
 	}
 
 	_onClick(event){
@@ -244,6 +260,25 @@ class TodoItem extends HTMLElement {
 					padding: 0em 0em 0em 0.5em;
 					border-left: 1px solid;
 				}
+
+				/* --------- style for edit template -------- */
+				input.edit-task{
+					box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+					border: 1px solid rgba(0, 0, 0, 0.2);
+					border-radius: 2em;
+					padding: 0.5em 1em;
+					margin: 3px 3px 3px 0px;
+					font-family: arial;
+					font-weight: 300;
+					width: 96%;
+					height: 1.5em;
+					font-size: 0.9em;
+				}
+				
+				input.edit-task:focus{
+					outline: none;
+					background-color: #c7f5d5;
+				}
 			</style>
 		`;
 
@@ -274,20 +309,32 @@ class TodoItem extends HTMLElement {
 			</li>
 		`;
 
-		if(this.status === 'X'){
-			this.shadow.innerHTML = todo_template + todo_template_completed;
+		let editable_value = this.priority + this.text;
+		let todo_edit_template = `			
+				<input class="edit-task" value="${editable_value}"/>
+		`;
+
+		if(this._edit_mode){
+			this.shadow.innerHTML = todo_template + todo_edit_template;
+			this.shadow.querySelector('input').addEventListener('change', this._onEdited.bind(this));
+			this.shadow.querySelector('input').addEventListener('focusout', this._onEdited.bind(this));
 		} else {
-			this.shadow.innerHTML = todo_template + todo_template_incomplete;
+			if(this.status === 'X'){
+				this.shadow.innerHTML = todo_template + todo_template_completed;
+			} else {
+				this.shadow.innerHTML = todo_template + todo_template_incomplete;
+			}
+			this.shadow.querySelector('li').addEventListener('dblclick', this._onDblClick.bind(this));
+			this.shadow.querySelector('li input').addEventListener('click', this._onClick.bind(this));
+			this.shadow.querySelector('li div.delete').addEventListener('click', this._onDeleteClick.bind(this));
+			/*
+			this.dispatchEvent(new CustomEvent('change', {
+				detail : { 
+					checked : false, 
+				},
+				bubbles : true,
+			}));*/
 		}
-		this.shadow.querySelector('li input').addEventListener('click', this._onClick.bind(this));
-		this.shadow.querySelector('li div.delete').addEventListener('click', this._onDeleteClick.bind(this));
-		/*
-		this.dispatchEvent(new CustomEvent('change', {
-			detail : { 
-				checked : false, 
-			},
-			bubbles : true,
-		}));*/
 	}
 }
 
