@@ -6,7 +6,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="css/style.css">
 
     <title>TODO:</title>
@@ -17,7 +18,7 @@
     <div class="flex-container-main">
     	<!-- LEFT PANEL -->
     	<div class="flex-item-main left-item left">
-    		<div class=".flex-container-sidebar">
+    		<div class="flex-container-sidebar">
     			<div class="flex-sidebar-item top"></div>
 	    		<div class="flex-sidebar-item center info">
 	    			<button class="text-button" id="btn-info">Info<span><span></button>
@@ -77,7 +78,7 @@
     	</div>
     	<!-- RIGHT PANEL -->
     	<div class="flex-item-main right-item right">
-    		<div class=".flex-container-sidebar">
+    		<div class="flex-container-sidebar">
     			<div class="flex-sidebar-item top"></div>
     			<div class="flex-sidebar-item center">
     				<!-- <button class="default-button" id="btn-complete-marked">Complete Selected</button> -->
@@ -86,12 +87,15 @@
     				<button class="default-button" id="btn-clear-completed">Clear Completed</button>
 	    			<button class="default-button" id="btn-clear-all">Start Afresh</button>
     			</div>
-    			<div class="flex-sidebar-item bottom"></div>	    		
+    			<div class="flex-sidebar-item bottom">
+					<div class="calendar"></div>
+				</div>	    		
     		</div>
     	</div>
     </div>
     <!-- Optional JavaScript -->
 	<script src="js/jquery.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- Required for calendar -->
 	<script src="js/util.js"></script>
     <script src="js/database.js"></script>
     <script src="js/model.js"></script>
@@ -101,6 +105,9 @@
     <script type="text/javascript">
 		$(document).ready(function(){
 			new App();
+			if($.datepicker){
+				$('.calendar').datepicker();
+			}
 		});
 	</script>
   </body>
