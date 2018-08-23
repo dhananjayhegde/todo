@@ -1,3 +1,6 @@
+:root{
+	--border: none;
+}
 body{
 	font-family: arial;
 	font-weight: 300;
@@ -108,10 +111,11 @@ button{
 	border-radius: 2em;
 	font-weight: 500;
 }
+/*
 .flex-sidebar-item button{	
 	margin-top:3.5em;
 	margin-left:2em;
-}
+}*/
 button.default-button{	
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	box-shadow: inset 1px 1px 10px rgba(255, 255, 255, 0.1);
@@ -138,6 +142,11 @@ button:hover{
 .flex-sidebar-item{
 	/* height: 100%; */
 	margin-top: 1em;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+	width: 100%;
 }
 .left {
 	/* padding-right: 0.9em; */
@@ -151,13 +160,16 @@ button:hover{
 }
 .top{
 	align-self: flex-start;
+	border: var(--border);
 }
 .bottom {
 	align-self: flex-end;
-	height: 30%;
+	height: calc(100vh / 3);
+	border: var(--border);
 }
 .center{
 	flex: 1;
+	border: var(--border);
 }
 /*.info{
 	
@@ -177,9 +189,9 @@ button:hover{
 }
 .info > button{
 	background-color: #ddd;
-	position: relative;
-	top: -2.5em;
-	left: -3em;
+	position: fixed;
+	top: 1em;
+	left: -1.5em;
 }
 .info > button:hover{
 	background-color: #aaa;
