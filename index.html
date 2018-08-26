@@ -79,7 +79,9 @@
     	<!-- RIGHT PANEL -->
     	<div class="flex-item-main right-item right">
     		<div class="flex-container-sidebar">
-    			<div class="flex-sidebar-item top"></div>
+    			<div class="flex-sidebar-item top">
+					<a href="#" class="settings">Settings</a>
+				</div>
     			<div class="flex-sidebar-item center">
     				<!-- <button class="default-button" id="btn-complete-marked">Complete Selected</button> -->
     				<!-- <button class="default-button" id="btn-undo-complete">Undo Completion</button> -->
@@ -92,7 +94,52 @@
 				</div>	    		
     		</div>
     	</div>
-    </div>
+	</div>
+	<template id="settings-overlay">
+		<div class="settings-container">
+			<div class="main">
+				<!-- <div class="row">
+					<div class="col left">
+						<label for="#filter">Default Filter criteria:</label>
+					</div>
+					<div class="col right">
+						<select id="filter">
+							<option value="by-date-desc" selected>Latest First</option>
+							<option value="by-date-asc">Oldest First</option>										
+							<option value="by-priority-desc">Priority High to Low</option>
+						</select>
+					</div>
+				</div> -->
+				<div class="row">
+					<div class="col left">
+						<label for="#sort">Default Sort criteria:</label>
+					</div>
+					<div class="col right">
+						<select id="sort" title="Sorting is in-group" >
+							<option value="by-date-desc" selected>Latest First</option>
+							<option value="by-date-asc">Oldest First</option>										
+							<option value="by-priority-desc">Priority High to Low</option>
+							<option value="by-priority-asc">Priority Low to High</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col left">
+						<label for="#group">Default Group criteria:</label>
+					</div>
+					<div class="col right">
+						<select id="group" title="Gives best result if gouping and sorting are by same criteria">										
+							<option value="by-status" selected>Status</option>
+							<option value="by-date">Date</option>
+							<option value="by-priority">Priority</option>
+							<option value="by-none"></option>
+						</select>
+					</div>
+				</div>
+				<button>X</button>
+			</div>
+		</div>
+	</template>
     <!-- Optional JavaScript -->
 	<script src="js/jquery.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- Required for calendar -->

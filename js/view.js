@@ -74,6 +74,13 @@ let View = function(model){
 			self.renderList(self.model.getList(self.ListDisplayOptions));
 		});
 
+		$('.settings').on('click', function(event){
+			event.preventDefault();
+			let template = document.querySelector('#settings-overlay');
+			let clone = document.importNode(template.content, true);
+			$('body').prepend(clone);
+		});
+
 		//render initial list
 		this.model.loadAllItems().then((results) => this.renderList(self.model.getList(self.ListDisplayOptions)));
 	};
