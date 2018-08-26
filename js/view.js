@@ -76,9 +76,11 @@ let View = function(model){
 
 		$('.settings').on('click', function(event){
 			event.preventDefault();
-			let template = document.querySelector('#settings-overlay');
-			let clone = document.importNode(template.content, true);
-			$('body').prepend(clone);
+			$('body div.settings-container').slideDown(600);
+		});
+		
+		$('.close-btn').on('click', function(event){
+			$('body div.settings-container').slideUp(600);
 		});
 
 		//render initial list
