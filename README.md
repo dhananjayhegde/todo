@@ -1,5 +1,3 @@
-##### NOTE:  This is still in the early stages of development, so, you may see many changes regularly.  Things may break.  But, they will eventually fall into place.
-
 # todo
 In-Browser TODO app with Javascript and jQuery
 
